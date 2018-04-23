@@ -14,6 +14,11 @@ public class DataSourceOverviewController {
 	@FXML
 	private TableView<Person> personTable;
 	@FXML
+	private TableView<Person> personTable2;
+	@FXML
+	private TableColumn<Person, String> firstNameColumn2;
+	
+	@FXML
 	private TableColumn<Person, String> firstNameColumn;
 	@FXML
 	private TableColumn<Person, String> lastNameColumn;
@@ -48,9 +53,9 @@ public class DataSourceOverviewController {
 	private void initialize() {
 		// Initialize the person table with the two columns.
 		firstNameColumn.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
-		lastNameColumn.setCellValueFactory(cellData -> {			  
-			return cellData.getValue().lastNameProperty();
-		});
+//		lastNameColumn.setCellValueFactory(cellData -> {			  
+//			return cellData.getValue().lastNameProperty();
+//		});
 
 		// Clear person details.
 		showPersonDetails(null);
