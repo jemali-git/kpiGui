@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import application.util.LocalDateAdapter;
 
 public class DataSource {
-
+	//
 	private final StringProperty serverType;
 	private final StringProperty serverName;
 	private final StringProperty authentication;
