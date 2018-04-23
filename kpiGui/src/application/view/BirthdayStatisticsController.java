@@ -13,6 +13,11 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.XYChart;
 
+/**
+ * The controller for the birthday statistics view.
+ * 
+ * @author Marco Jakob
+ */
 public class BirthdayStatisticsController {
 
     @FXML
@@ -23,6 +28,10 @@ public class BirthdayStatisticsController {
 
     private ObservableList<String> monthNames = FXCollections.observableArrayList();
 
+    /**
+     * Initializes the controller class. This method is automatically called
+     * after the fxml file has been loaded.
+     */
     @FXML
     private void initialize() {
         // Get an array with the English month names.
@@ -34,6 +43,11 @@ public class BirthdayStatisticsController {
         xAxis.setCategories(monthNames);
     }
 
+    /**
+     * Sets the persons to show the statistics for.
+     * 
+     * @param persons
+     */
     public void setPersonData(List<Person> persons) {
         // Count the number of people having their birthday in a specific month.
         int[] monthCounter = new int[12];
