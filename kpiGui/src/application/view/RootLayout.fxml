@@ -12,6 +12,13 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
                <items>
+               
+                  <MenuItem mnemonicParsing="false" onAction="#handleNew" text="Connect Data Source Explorer">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator>
+                  </MenuItem>
+                  
                   <MenuItem mnemonicParsing="false" onAction="#handleNew" text="New">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />

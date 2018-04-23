@@ -96,10 +96,10 @@ public class MainApp extends Application {
 		}
 
 		// Try to load last opened person file.
-		File file = getPersonFilePath();
-		if (file != null) {
-			loadPersonDataFromFile(file);
-		}
+//		File file = getPersonFilePath();
+//		if (file != null) {
+//			loadPersonDataFromFile(file);
+//		}
 	}
 
 	/**

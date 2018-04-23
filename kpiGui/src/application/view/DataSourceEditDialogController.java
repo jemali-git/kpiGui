@@ -5,6 +5,7 @@ import application.util.DateUtil;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -17,7 +18,7 @@ import javafx.stage.Stage;
 public class DataSourceEditDialogController {
 
     @FXML
-    private TextField firstNameField;
+    private ChoiceBox firstNameField;
     @FXML
     private TextField lastNameField;
     @FXML
@@ -62,7 +63,7 @@ public class DataSourceEditDialogController {
     public void setPerson(Person person) {
         this.person = person;
 
-        firstNameField.setText(person.getFirstName());
+//        firstNameField.sett(person.getFirstName());
         lastNameField.setText(person.getLastName());
         streetField.setText(person.getStreet());
         postalCodeField.setText(Integer.toString(person.getPostalCode()));
@@ -86,7 +87,7 @@ public class DataSourceEditDialogController {
     @FXML
     private void handleOk() {
         if (isInputValid()) {
-            person.setFirstName(firstNameField.getText());
+//            person.setFirstName(firstNameField.getText());
             person.setLastName(lastNameField.getText());
             person.setStreet(streetField.getText());
             person.setPostalCode(Integer.parseInt(postalCodeField.getText()));
@@ -114,9 +115,9 @@ public class DataSourceEditDialogController {
     private boolean isInputValid() {
         String errorMessage = "";
 
-        if (firstNameField.getText() == null || firstNameField.getText().length() == 0) {
-            errorMessage += "No valid first name!\n"; 
-        }
+//        if (firstNameField.getText() == null || firstNameField.getText().length() == 0) {
+//            errorMessage += "No valid first name!\n"; 
+//        }
         if (lastNameField.getText() == null || lastNameField.getText().length() == 0) {
             errorMessage += "No valid last name!\n"; 
         }
