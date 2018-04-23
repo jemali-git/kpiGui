@@ -14,7 +14,7 @@ import javafx.stage.Stage;
  * 
  * @author Marco Jakob
  */
-public class PersonEditDialogController {
+public class DataSourceEditDialogController {
 
     @FXML
     private TextField firstNameField;

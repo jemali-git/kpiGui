@@ -10,7 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
-public class PersonOverviewController {
+public class DataSourceOverviewController {
     @FXML
     private TableView<Person> personTable;
     @FXML
@@ -38,7 +38,7 @@ public class PersonOverviewController {
      * The constructor.
      * The constructor is called before the initialize() method.
      */
-    public PersonOverviewController() {
+    public DataSourceOverviewController() {
     }
 
     /**
