@@ -1,26 +1,17 @@
 package example1;
 
-import java.net.InetAddress;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class JavaFXFileBrowseDemoApp extends Application {
+public class Exmaple extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -40,7 +31,19 @@ public class JavaFXFileBrowseDemoApp extends Application {
 		HBox.setHgrow(hBox1,Priority.SOMETIMES);
 //		hBox1.setStyle("-fx-padding: 10;" + "-fx-border-style: solid inside;" + "-fx-border-width: 2;"
 //				+ "-fx-border-insets: 5;" + "-fx-border-radius: 5;" + "-fx-border-color: blue;");
-		HBox hBox2 = new HBox(button2);
+		
+		TabPane tabPane=new TabPane();	
+		
+		
+		Tab tab = new Tab();
+		tab.setText("tab");
+		tabPane.getTabs().addAll(new Tab("tab1"),new Tab("tab2"),new Tab("tab3"));
+		//tab.setStyle("-fx-border-color:red; -fx-background-color: blue;");
+		//tab.setGraphic(new Label("Tab B"));
+		//tab.getGraphic().setStyle("-fx-text-fill: #c4d8de;");
+		
+		
+		HBox hBox2 = new HBox(tabPane);
 		hBox2.setAlignment(Pos.CENTER_RIGHT);
 		HBox.setHgrow(hBox2,Priority.SOMETIMES);
 		
