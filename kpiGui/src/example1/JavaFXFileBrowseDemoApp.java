@@ -18,7 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class JavaFXFileBrowseDemoApp extends Application {
-	private TreeView<String> treeView;
+	private TreeView<Object> treeView;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -36,14 +36,20 @@ public class JavaFXFileBrowseDemoApp extends Application {
 			hostName = InetAddress.getLocalHost().getHostName();
 		} catch (Exception x) {
 		}
-		TreeItem<String> rootNode = new TreeItem<>(hostName,
-				new ImageView(new Image("file:resources/images/edit.png")));
-		Iterable<Path> rootDirectories = FileSystems.getDefault().getRootDirectories();
-
-		for (Path name : rootDirectories) {
-			FilePathTreeItem treeNode = new FilePathTreeItem(name);
-			rootNode.getChildren().add(treeNode);
+		ImageView rooticon = new ImageView(new Image("file:resources/images/IBM_Notes.png"));
+		rooticon.setFitHeight(30);
+		rooticon.setFitWidth(30);
+		TreeItem<Object> rootNode = new TreeItem<>(hostName, rooticon);
+		
+		for (int i = 0; i < 5; i++) {
+			ImageView nodeIcon = new ImageView(new Image("file:resources/images/view.png"));
+			nodeIcon.setFitHeight(30);
+			nodeIcon.setFitWidth(30);
+			TreeItem<Object> node = new TreeItem<>(hostName, nodeIcon);
+			node.setExpanded(true);
+			rootNode.getChildren().add(node);
 		}
+
 		rootNode.setExpanded(true);
 		// create the tree view
 		treeView = new TreeView<>(rootNode);

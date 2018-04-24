@@ -4,19 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.prefs.Preferences;
 
-import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
@@ -25,8 +12,35 @@ import application.model.Person;
 import application.model.PersonListWrapper;
 import application.view.BirthdayStatisticsController;
 import application.view.DataSourceEditDialogController;
-import application.view.DataSourceOverviewController;
-import application.view.RootLayoutController;
+import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class MainApp extends Application {
 
@@ -68,7 +82,7 @@ public class MainApp extends Application {
 		this.primaryStage.getIcons().add(new Image("file:resources/images/address_book_32.png"));
 
 		initRootLayout();
-
+		//
 		showPersonOverview();
 	}
 
@@ -80,26 +94,43 @@ public class MainApp extends Application {
 			// Load root layout from fxml file.
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(MainApp.class.getResource("view/RootLayout.fxml"));
-			rootLayout = (BorderPane) loader.load();
+			// rootLayout = (BorderPane) loader.load();
+
+			BorderPane borderPane = new BorderPane();
+
+			borderPane.getStylesheets().add(MainApp.class.getResource("view/DarkTheme.css").toExternalForm());
+			//
+			MenuBar menuBar = new MenuBar();
+			borderPane.setTop(menuBar);
+			BorderPane.setAlignment(menuBar, Pos.CENTER);
+			Menu menu = new Menu("File");
+			menuBar.getMenus().add(menu);
+
+			menu.setMnemonicParsing(false);
+			MenuItem menuItem = new MenuItem("Connect Data Source Explorer");
+			menu.getItems().add(menuItem);
+			menuItem.setMnemonicParsing(false);
+			menuItem.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
+			rootLayout = borderPane;
 
 			// Show the scene containing the root layout.
 			Scene scene = new Scene(rootLayout);
 			primaryStage.setScene(scene);
 
 			// Give the controller access to the main app.
-			RootLayoutController controller = loader.getController();
-			controller.setMainApp(this);
+			// RootLayoutController controller = loader.getController();
+			// controller.setMainApp(this);
 
 			primaryStage.show();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		// Try to load last opened person file.
-//		File file = getPersonFilePath();
-//		if (file != null) {
-//			loadPersonDataFromFile(file);
-//		}
+		// File file = getPersonFilePath();
+		// if (file != null) {
+		// loadPersonDataFromFile(file);
+		// }
 	}
 
 	/**
@@ -108,18 +139,75 @@ public class MainApp extends Application {
 	public void showPersonOverview() {
 		try {
 			// Load person overview.
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(MainApp.class.getResource("view/DataSourceOverview.fxml"));
-			AnchorPane personOverview = (AnchorPane) loader.load();
+			// FXMLLoader loader = new FXMLLoader();
+			// loader.setLocation(MainApp.class.getResource("view/DataSourceOverview.fxml"));
+			// AnchorPane personOverview = (AnchorPane) loader.load();
+			/***/
+			AnchorPane dataSourceOverview = new AnchorPane();
+			dataSourceOverview.getStylesheets().add(MainApp.class.getResource("view/DarkTheme.css").toExternalForm());
+			SplitPane splitPane = new SplitPane();
+			dataSourceOverview.getChildren().add(splitPane);
+			AnchorPane.setBottomAnchor(splitPane, 0.0);
+			AnchorPane.setTopAnchor(splitPane, 0.0);
+			AnchorPane.setRightAnchor(splitPane, 0.0);
+			AnchorPane.setLeftAnchor(splitPane, 0.0);
+			/***/
+			AnchorPane anchorPane = new AnchorPane();
+			anchorPane.setMaxWidth(300);
+			anchorPane.setMinWidth(50);
+			splitPane.getItems().add(anchorPane);
+
+			Object hostName = "hostname";
+			ImageView rooticon = new ImageView(new Image("file:resources/images/IBM_Notes.png"));
+			rooticon.setFitHeight(30);
+			rooticon.setFitWidth(30);
+
+			TreeItem<Object> rootNode = new TreeItem<>(hostName, rooticon);
+			for (int i = 0; i < 5; i++) {
+				ImageView nodeIcon = new ImageView(new Image("file:resources/images/view.png"));
+				nodeIcon.setFitHeight(30);
+				nodeIcon.setFitWidth(30);
+				TreeItem<Object> node = new TreeItem<>(hostName, nodeIcon);
+				node.setExpanded(true);
+				rootNode.getChildren().add(node);
+			}
+			rootNode.setExpanded(true);
+			// create the tree view
+			// add everything to the tree pane
+
+			// VBox treeBox = new VBox();
+			TreeView<Object> treeView = new TreeView<>(rootNode);
+
+			Pane pane=new Pane();
+			
+			// treeBox.getChildren().addAll(new Label("File browser"), treeView);
+			// VBox.setVgrow(treeView, Priority.ALWAYS);
+
+			anchorPane.getChildren().add(treeView);
+			//
+			AnchorPane.setBottomAnchor(treeView, 0.0);
+			AnchorPane.setTopAnchor(treeView, 0.0);
+			AnchorPane.setRightAnchor(treeView, 0.0);
+			AnchorPane.setLeftAnchor(treeView, 0.0);
+
+			/***/
+			AnchorPane anchorPane2 = new AnchorPane();
+			splitPane.getItems().add(anchorPane2);
+			TableView<Person> tableView2 = new TableView<>();
+			AnchorPane.setBottomAnchor(tableView2, 0.0);
+			AnchorPane.setTopAnchor(tableView2, 0.0);
+			AnchorPane.setRightAnchor(tableView2, 0.0);
+			AnchorPane.setLeftAnchor(tableView2, 0.0);
+			anchorPane2.getChildren().add(tableView2);
 
 			// Set person overview into the center of root layout.
-			rootLayout.setCenter(personOverview);
+			rootLayout.setCenter(dataSourceOverview);
 
 			// Give the controller access to the main app.
-			DataSourceOverviewController controller = loader.getController();
-			controller.setMainApp(this);
+			// DataSourceOverviewController controller = loader.getController();
+			// controller.setMainApp(this);
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
