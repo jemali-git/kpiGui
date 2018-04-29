@@ -1,10 +1,10 @@
-package example3;
+package example1;
 
 import java.util.function.Function;
 
-public class ThreadListner {
+public class calback {
 
-	public ThreadListner() {
+	public calback() {
 		// TODO Auto-generated constructor stub
 	}
 
