@@ -18,7 +18,7 @@ public class calback {
 class FirstClass {
 	String prefix;
 
-	public FirstClass(String prefix) {
+	public FirstClass(String prefix) { 
 		this.prefix = prefix;
 	}
 
