@@ -1,0 +1,10 @@
+.itemLabel {
+    -fx-font-size: 7.0pt;
+    -fx-font-family: Verdana;
+    -fx-text-fill: black;
+    -fx-opacity: 1;
+    -fx-background-color: #dddddd;
+    -fx-padding: 0 2 0 2;
+  	-fx-background-radius: 3 3 3 3;
+  	-fx-max-height:6.0pt;
+}
