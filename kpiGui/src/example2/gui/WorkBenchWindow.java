@@ -2,21 +2,13 @@ package example2.gui;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import application.MainApp;
 import example2.gui.menuBar.KpiMenuBar;
+import example2.gui.statusLine.KpiStatusLine;
 import example2.gui.toolBar.KpiToolBar;
 import example2.gui.view.KpiPerspective;
-import example2.gui.view.explorer.Explorer;
 import javafx.application.Application;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -24,19 +16,23 @@ public class WorkBenchWindow extends Application {
 	public static KpiMenuBar kpiMenuBar;
 	public static KpiToolBar kpiToolBar;
 	public static KpiPerspective kpiPerspective;
+	public static KpiStatusLine kpiStatusLine;
 
 	@Override
 	public void start(Stage primaryStage) {
 		kpiMenuBar = new KpiMenuBar();
 		kpiToolBar = new KpiToolBar();
 		kpiPerspective = new KpiPerspective();
+		kpiStatusLine = new KpiStatusLine();
 
 		BorderPane borderPane = new BorderPane();
 		borderPane.getStylesheets().add(getClass().getResource("style/DarkTheme.css").toExternalForm());
-		
+
 		borderPane.setTop(new VBox(kpiMenuBar, kpiToolBar));
 
 		borderPane.setCenter(kpiPerspective);
+
+		borderPane.setBottom(kpiStatusLine);
 		primaryStage.setScene(new Scene(borderPane, 700, 500));
 		primaryStage.show();
 	}

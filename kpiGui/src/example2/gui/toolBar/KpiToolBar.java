@@ -9,5 +9,6 @@ public class KpiToolBar extends ToolBar {
 	public KpiToolBar() {
 		searchField = new SearchField();
 		getItems().add(searchField);
+		
 	}
 }

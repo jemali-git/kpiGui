@@ -49,6 +49,12 @@ public class SearchField extends TextField {
 				parent.getChildren().remove(treeItem);
 				parent.getChildren().add(0, treeItem);
 				parent.setExpanded(true);
+				TreeItem<Object> parent2 = parent.parentProperty().get();
+				if (parent2 != null) {
+					parent2.getChildren().remove(parent);
+					parent2.getChildren().add(0, parent);
+					parent2.setExpanded(true);
+				}
 			}
 		}
 	}

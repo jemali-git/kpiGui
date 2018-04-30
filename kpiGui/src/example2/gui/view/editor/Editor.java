@@ -18,7 +18,6 @@ import javafx.scene.layout.VBox;
 
 public class Editor extends TabPane {
 	public Editor() {
-	
 	}
 
 	public void addView(Set<KpiColumn> columns, KpiView kpiView, Function<Boolean, ?> function) {
@@ -29,20 +28,22 @@ public class Editor extends TabPane {
 		});
 
 		Table table = new Table(simpleColumns, kpiView.getViewPath());
+		
+		table.setOnCloseRequest(new EventHandler<Event>() {
+			@Override
+			public void handle(Event arg0) {
+				 function.apply(false);
+				 updateBounds();
+			}
+		});
 
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
 				getTabs().add(table);
 				getSelectionModel().select(table);
-				table.setOnCloseRequest(new EventHandler<Event>() {
-					@Override
-					public void handle(Event arg0) {
-						function.apply(false);
-					}
-				});
 			}
-		});
+		});     
 	}
 
 	// public Boolean isEditing(String id) {
