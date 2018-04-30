@@ -8,4 +8,5 @@ public interface KpiServer {
 	public String getServerPath();
 	public String getServerPassword();
 	public void getKpiDataBases(BiFunction<KpiDataBase, Double, ?> function);
+	public String getKpiId();//TODO remove
 }

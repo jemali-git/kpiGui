@@ -6,15 +6,16 @@ import example2.core.template.KpiDataBase;
 import example2.core.template.KpiServer;
 import example2.gui.WorkBenchWindow;
 
-public class KpiServerImpl extends Thread implements KpiServer {
+public class ServerImpl extends Thread implements KpiServer {
 	String name;
 
-	public KpiServerImpl(String name) {
+	public ServerImpl(String name) {
 		this.name = name;
 	}
 
 	@Override
 	public void getKpiDataBases(BiFunction<KpiDataBase, Double, ?> function) {
+		KpiServer kpiServer = this;
 		Thread thread = new Thread() {
 			@Override
 			public void run() {
@@ -26,27 +27,31 @@ public class KpiServerImpl extends Thread implements KpiServer {
 						e.printStackTrace();
 					}
 					double progress = new Double(i + 1) * 100 / count;
-					function.apply(new KpiDataBaseImpl(WorkBenchWindow.getRN()), progress);
+					function.apply(new DataBaseImpl(WorkBenchWindow.getRN(), kpiServer), progress);
 				}
 			}
 		};
 		thread.start();
 	}
+
 	@Override
 	public String toString() {
-		return name;
+		return getServerPath();
 	}
 
 	@Override
 	public String getServerPath() {
-		// TODO Auto-generated method stub
-		return null;
+		return name;
 	}
 
 	@Override
 	public String getServerPassword() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	@Override
+	public String getKpiId() {
+		return getServerPath();
 	}
 
 }

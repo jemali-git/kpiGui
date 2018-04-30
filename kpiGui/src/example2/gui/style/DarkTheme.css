@@ -2,9 +2,15 @@
     -fx-font-size: 7.0pt;
     -fx-font-family: Verdana;
     -fx-text-fill: black;
-    -fx-opacity: 1;
+    -fx-opacity: 1.0;
     -fx-background-color: #dddddd;
-    -fx-padding: 0 2 0 2;
-  	-fx-background-radius: 3 3 3 3;
+    -fx-padding: 0.0 2.0 0.0 2.0;
+  	-fx-background-radius: 3.0 3.0 3.0 3.0;
   	-fx-max-height:6.0pt;
+}
+.table-row-cell:empty{
+	-fx-background-color: transparent;
+}
+.table-row-cell:empty .table-cell{
+	-fx-border-width: 0;
 }

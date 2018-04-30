@@ -37,7 +37,7 @@ public class WorkBenchWindow extends Application {
 		borderPane.setTop(new VBox(kpiMenuBar, kpiToolBar));
 
 		borderPane.setCenter(kpiPerspective);
-		primaryStage.setScene(new Scene(borderPane, 500, 600));
+		primaryStage.setScene(new Scene(borderPane, 700, 500));
 		primaryStage.show();
 	}
 
