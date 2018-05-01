@@ -48,18 +48,32 @@ public class ServerExplorer extends TreeItem<Object> {
 			return super.getChildren();
 		}
 		childrenLoaded = true;
-		((KpiServer) getValue()).getKpiDataBases(this::addChild);
+		ObservableList<TreeItem<Object>> children = super.getChildren();
+		class CallBack {
+			public int addChild(KpiDataBase kpiDataBase, Double progress) {
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						children.add(new DataBaseExplorer(kpiDataBase));
+					}
+				});
+				return 0;
+			}
+		}
+		CallBack callBack = new CallBack();
+		
+		((KpiServer) getValue()).getKpiDataBases(callBack::addChild);
 		return super.getChildren();
 	}
 
-	public int addChild(KpiDataBase kpiDataBase, Double progress) {
-		ObservableList<TreeItem<Object>> objects = super.getChildren();
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				objects.add(new DataBaseExplorer(kpiDataBase));
-			}
-		});
-		return 0;
-	}
+//	public int addChild(KpiDataBase kpiDataBase, Double progress) {
+//		ObservableList<TreeItem<Object>> objects = super.getChildren();
+//		Platform.runLater(new Runnable() {
+//			@Override
+//			public void run() {
+//				objects.add(new DataBaseExplorer(kpiDataBase));
+//			}
+//		});
+//		return 0;
+//	}
 }

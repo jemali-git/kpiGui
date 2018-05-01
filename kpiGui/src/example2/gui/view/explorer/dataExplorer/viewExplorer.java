@@ -1,12 +1,8 @@
 package example2.gui.view.explorer.dataExplorer;
 
-import java.util.Set;
-
-import example2.core.template.KpiColumn;
 import example2.core.template.KpiView;
 import example2.gui.view.KpiPerspective;
 import example2.gui.view.explorer.dataExplorer.util.Ticket;
-import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -16,7 +12,7 @@ public class viewExplorer extends TreeItem<Object> {
 	private Ticket ticket;
 	private boolean childrenLoaded = false;
 
-	public viewExplorer(Object value) {    
+	public viewExplorer(Object value) {
 		super(value);
 		ticket = new Ticket("View");
 		setGraphic(ticket);
@@ -25,7 +21,8 @@ public class viewExplorer extends TreeItem<Object> {
 				if (event.getEventType().equals(MouseEvent.MOUSE_CLICKED)) {
 					if (!childrenLoaded) {
 						childrenLoaded = true;
-						((KpiView) getValue()).getKpiColumn(this::editView);
+						KpiView kpiView = (KpiView) getValue();
+						KpiPerspective.editor.createViewModel(kpiView, this::setChildrenLoaded);
 					}
 				}
 				event.consume();
@@ -52,33 +49,5 @@ public class viewExplorer extends TreeItem<Object> {
 
 	public Ticket getTicket() {
 		return ticket;
-	}
-
-//	@Override
-//	public boolean isLeaf() {
-//		if (childrenLoaded) {
-//			return getChildren().isEmpty();
-//		}
-//		return false;
-//	}
-
-//	@Override
-//	public ObservableList<TreeItem<Object>> getChildren() {
-//
-//		if (childrenLoaded) {
-//			return super.getChildren();
-//		}
-//		System.out.println("children");
-//		childrenLoaded = true;
-//		((KpiView) getValue()).getKpiColumn(this::editView);
-//		return super.getChildren();
-//	}
-
-	public Boolean editView(Set<KpiColumn> columns) {
-
-		KpiView kpiView = (KpiView) getValue();
-		KpiPerspective.editor.addView(columns, kpiView, this::setChildrenLoaded);
-
-		return null;
 	}
 }

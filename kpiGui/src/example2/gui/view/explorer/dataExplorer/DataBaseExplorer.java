@@ -13,13 +13,12 @@ public class DataBaseExplorer extends TreeItem<Object> {
 
 	private Ticket ticket;
 
-
 	public DataBaseExplorer(Object value) {
 		super(value);
 		ticket = new Ticket("DataBase");
 		setGraphic(ticket);
 	}
-	
+
 	public void select() {
 		ticket.selectionOn();
 	}
@@ -27,15 +26,15 @@ public class DataBaseExplorer extends TreeItem<Object> {
 	public void deselect() {
 		ticket.selectOff();
 	}
+
 	public Ticket getTicket() {
 		return ticket;
 	}
 
-
-
 	public boolean isChildrenLoaded() {
 		return childrenLoaded;
 	}
+
 	@Override
 	public boolean isLeaf() {
 		if (childrenLoaded) {
@@ -50,19 +49,20 @@ public class DataBaseExplorer extends TreeItem<Object> {
 			return super.getChildren();
 		}
 		childrenLoaded = true;
-		((KpiDataBase) getValue()).getKpiView(this::addChild);
-		return super.getChildren();
-	}
-
-	public Integer addChild(KpiView value, Double progress) {
-		ObservableList<TreeItem<Object>> objects = super.getChildren();
-
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				objects.add(new viewExplorer(value));
+		ObservableList<TreeItem<Object>> children = super.getChildren();
+		class CallBack {
+			int addChild(KpiView kpiView, Double progress) {
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						children.add(new viewExplorer(kpiView));
+					}
+				});
+				return 0;
 			}
-		});
-		return null;
+		}
+		CallBack callBack = new CallBack();
+		((KpiDataBase) getValue()).getKpiView(callBack::addChild);
+		return super.getChildren();
 	}
 }

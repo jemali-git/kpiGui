@@ -1,31 +1,28 @@
 package example2.gui.view.editor.models;
 
+import example2.core.template.KpiColumn;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-public class SimpleColumn {
-	final SimpleStringProperty originalName;
-	SimpleStringProperty customName;
+public class ColumnModel {
+	KpiColumn kpiColumn;
+	SimpleStringProperty columnName;
 	SimpleBooleanProperty isPrimaryKey;
 	SimpleBooleanProperty isBaseOnUpdate;
 
-	public SimpleColumn(String originalName) {
-		this.originalName = new SimpleStringProperty(originalName);
-		this.customName = new SimpleStringProperty(originalName);
+	public ColumnModel(KpiColumn kpiColumn) {
+		this.kpiColumn = kpiColumn;
+		this.columnName = new SimpleStringProperty(kpiColumn.getColumnPath());
 		this.isPrimaryKey = new SimpleBooleanProperty(false);
 		this.isBaseOnUpdate = new SimpleBooleanProperty(false);
 	}
 
-	public String getOriginalName() {
-		return originalName.get();
+	public void setColumnName(String columnName) {
+		this.columnName = new SimpleStringProperty(columnName);
 	}
 
-	public String getCustomName() {
-		return customName.get();
-	}
-
-	public void setCustomName(String customName) {
-		this.customName = new SimpleStringProperty(customName);
+	public String getColumnName() {
+		return columnName.get();
 	}
 
 	public SimpleBooleanProperty getIsPrimaryKey() {
@@ -46,6 +43,6 @@ public class SimpleColumn {
 
 	@Override
 	public String toString() {
-		return getOriginalName();
+		return getColumnName();
 	}
 }

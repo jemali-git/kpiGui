@@ -2,24 +2,26 @@ package example2.core.lotusNotes;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import example2.core.template.KpiColumn;
 import example2.core.template.KpiDataBase;
 import example2.core.template.KpiView;
 import example2.gui.WorkBenchWindow;
+import example2.gui.view.editor.models.ViewModel;
 
 public class ViewImpl extends Thread implements KpiView {
-	String name;
+	String viewPath;
 	KpiDataBase kpiDataBase;
 
-	public ViewImpl(String name, KpiDataBase kpiDataBase) {
-		this.name = name;
+	public ViewImpl(String viewPath, KpiDataBase kpiDataBase) {
+		this.viewPath = viewPath;
 		this.kpiDataBase = kpiDataBase;
 	}
 
 	@Override
-	public void getKpiColumn(Function<Set<KpiColumn>, ?> function) {
+	public void getKpiColumn(Function<Set<KpiColumn>, ?> createColumns) {
 		Thread thread = new Thread() {
 			@Override
 			public void run() {
@@ -32,11 +34,10 @@ public class ViewImpl extends Thread implements KpiView {
 					}
 					kpiColumns.add(new ColumnImpl(WorkBenchWindow.getRN()));
 				}
-
-				function.apply(kpiColumns);
+				createColumns.apply(kpiColumns);
 			}
 		};
-		thread.start();
+		thread.start();	
 	}
 
 	@Override
@@ -46,7 +47,7 @@ public class ViewImpl extends Thread implements KpiView {
 
 	@Override
 	public String getViewPath() {
-		return name;
+		return viewPath;
 	}
 
 	@Override
@@ -56,7 +57,8 @@ public class ViewImpl extends Thread implements KpiView {
 
 	@Override
 	public String getKpiId() {
-		return getName()+kpiDataBase.getKpiId();
+		return getName() + kpiDataBase.getKpiId();
 	}
 
+	
 }

@@ -2,24 +2,24 @@ package example2.core.lotusNotes;
 
 import example2.core.template.KpiColumn;
 import example2.core.template.KpiView;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 public class ColumnImpl extends Thread implements KpiColumn {
-	String columnName;
+	String columnPath;
 
 	public ColumnImpl(String columnName) {
-		this.columnName = columnName;
+		this.columnPath = columnName;
 	}
 
 	@Override
-	public String getColumnName() {
-		return columnName;
+	public String getColumnPath() {
+		return columnPath;
 	}
-
-	
 
 	@Override
 	public String toString() {
-		return getColumnName();
+		return getColumnPath();
 	}
 
 	@Override
@@ -27,6 +27,7 @@ public class ColumnImpl extends Thread implements KpiColumn {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	@Override
 	public String getKpiId() {
 		return null;
