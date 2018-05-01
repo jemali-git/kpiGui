@@ -1,6 +1,5 @@
 package example2.gui.view.operationProgress.operation;
 
-import example2.core.template.KpiView;
 import example2.gui.view.KpiPerspective;
 import example2.gui.view.editor.models.ViewModel;
 import javafx.geometry.Insets;
@@ -14,6 +13,7 @@ public class Operation extends VBox {
 
 	ViewModel viewModel;
 	boolean modelIsDisplayed ;
+	
 	public Operation(ViewModel viewModel) {
 		this.viewModel = viewModel;
 		modelIsDisplayed = false;
@@ -61,7 +61,5 @@ public class Operation extends VBox {
 				event.consume();
 			}
 		});
-
 	}
-
 }

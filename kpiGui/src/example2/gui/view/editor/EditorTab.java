@@ -52,7 +52,7 @@ public class EditorTab extends Tab {
 
 		simpleColumnsTable.setEditable(true);
 
-		/** customNameCol **/
+		/** NameCol **/
 		TableColumn<ColumnModel, String> columnNameCol = new TableColumn<>("Name");
 		columnNameCol.setCellValueFactory(new PropertyValueFactory<>("columnName"));
 		columnNameCol.setCellFactory(TextFieldTableCell.<ColumnModel>forTableColumn());
@@ -89,18 +89,13 @@ public class EditorTab extends Tab {
 
 		save.setOnAction(value -> {
 			KpiPerspective.operationProgress.addOperation(viewModel);
-			System.out.println(viewModel.getUpdatePeriode().get());
 		});
 
 		CheckBox saveOnly = new CheckBox("Save Without Update");
 		saveOnly.selectedProperty().bindBidirectional(viewModel.getSaveOnly());
 
 		TimeChooser timeChooser = new TimeChooser("Set Update Periode",viewModel.getUpdatePeriode());
-		
-		
-		
 
-		
 		timeChooser.setDisable(saveOnly.selectedProperty().get());
 		saveOnly.selectedProperty().bindBidirectional(timeChooser.disableProperty());
 
