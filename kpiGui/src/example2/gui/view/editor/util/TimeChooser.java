@@ -1,5 +1,7 @@
 package example2.gui.view.editor.util;
 
+import java.util.function.Function;
+
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -10,7 +12,7 @@ public class TimeChooser extends HBox {
 	int hours;
 	TextField textTime;
 
-	public TimeChooser(String msg) {
+	public TimeChooser(String msg, Function<Long, ?> setUpdatePeriod) {
 		setSpacing(10);
 		getChildren().add(new Label(msg + ": "));
 		textTime = new TextField();
@@ -21,6 +23,8 @@ public class TimeChooser extends HBox {
 			textTime.setText(newValue.replaceAll("[^\\d]", ""));
 			try {
 				long time = Long.parseLong(textTime.getText());
+
+				setUpdatePeriod.apply(time);
 				hours = (int) time / (60 * 60);
 				time = time % (60 * 60);
 				minutes = (int) (time / 60);
@@ -35,4 +39,9 @@ public class TimeChooser extends HBox {
 
 		getChildren().addAll(textTime, label);
 	}
+
+	public void setTextTime(Long time) {
+		this.textTime.setText(time.toString());
+	}
+
 }

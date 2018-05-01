@@ -10,8 +10,14 @@ import java.util.function.BiFunction;
 
 public interface KpiView {
 	public String getViewPath();
+
 	public void getKpiColumn(Function<Set<KpiColumn>, ?> createColumns);
-	
+
 	public KpiDataBase getKpiDataBase();
-	public String getKpiId();//TODO remove
+
+	public String getKpiId();// TODO remove
+	public void save(ViewModel viewModel,Function<String, ?> setTitle,Function<String, ?> setMessage,Function<Float, ?> setProgress);
+
+	public void update(ViewModel viewModel);
+
 }

@@ -2,6 +2,7 @@ package example2.gui.view.editor;
 
 import java.util.Set;
 
+import example2.gui.view.KpiPerspective;
 import example2.gui.view.editor.models.ColumnModel;
 import example2.gui.view.editor.models.ViewModel;
 import example2.gui.view.editor.util.TimeChooser;
@@ -9,7 +10,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -25,9 +25,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-public class Table extends Tab {
-
-	public Table(ViewModel viewModel) {
+public class EditorTab extends Tab {
+	
+	public EditorTab(ViewModel viewModel) {
 		setText(viewModel.getViewName().get());
 
 		VBox vBox = new VBox();
@@ -83,14 +83,21 @@ public class Table extends Tab {
 		/***************/
 
 		Button save = new Button("Save");
+		
 		save.setOnAction(value -> {
-			System.out.println(viewModel.getViewName().get());
-			System.out.println(viewModel.getSaveOnly());
+			
+			KpiPerspective.operationProgress.addOperation(viewModel);
+			System.out.println(viewModel.getUpdatePeriode().get());
+
 		});
 		CheckBox saveOnly = new CheckBox("Save Without Update");
 		saveOnly.selectedProperty().bindBidirectional(viewModel.getSaveOnly());
+
 		
-		TimeChooser timeChooser = new TimeChooser("Set Update Periode");
+				viewModel.setUpdatePeriode(0);
+		
+		TimeChooser timeChooser = new TimeChooser("Set Update Periode",viewModel::setUpdatePeriode);
+		timeChooser.setTextTime(viewModel.getUpdatePeriode().get());
 
 		saveOnly.selectedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
@@ -104,9 +111,6 @@ public class Table extends Tab {
 
 	public void show(Set<ColumnModel> columnModels) {
 		columnModels.forEach(col -> {
-			// System.out.println(col.getOriginalName() + " " + col.getCustomName() + " " +
-			// col.getIsPrimaryKey() + " "
-			// + col.getIsBaseOnUpdate());
 		});
 	}
 
