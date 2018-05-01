@@ -6,6 +6,7 @@ import example2.gui.view.KpiPerspective;
 import example2.gui.view.editor.models.ColumnModel;
 import example2.gui.view.editor.models.ViewModel;
 import example2.gui.view.editor.util.TimeChooser;
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -24,9 +25,11 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.util.StringConverter;
+import javafx.util.converter.NumberStringConverter;
 
 public class EditorTab extends Tab {
-	
+
 	public EditorTab(ViewModel viewModel) {
 		setText(viewModel.getViewName().get());
 
@@ -83,28 +86,25 @@ public class EditorTab extends Tab {
 		/***************/
 
 		Button save = new Button("Save");
-		
+
 		save.setOnAction(value -> {
-			
 			KpiPerspective.operationProgress.addOperation(viewModel);
 			System.out.println(viewModel.getUpdatePeriode().get());
-
 		});
+
 		CheckBox saveOnly = new CheckBox("Save Without Update");
 		saveOnly.selectedProperty().bindBidirectional(viewModel.getSaveOnly());
 
+		TimeChooser timeChooser = new TimeChooser("Set Update Periode",viewModel.getUpdatePeriode());
 		
-				viewModel.setUpdatePeriode(0);
 		
-		TimeChooser timeChooser = new TimeChooser("Set Update Periode",viewModel::setUpdatePeriode);
-		timeChooser.setTextTime(viewModel.getUpdatePeriode().get());
+		
 
-		saveOnly.selectedProperty().addListener(new ChangeListener<Boolean>() {
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				timeChooser.setDisable(newValue);
-			}
-		});
+		
+		timeChooser.setDisable(saveOnly.selectedProperty().get());
+		saveOnly.selectedProperty().bindBidirectional(timeChooser.disableProperty());
+
+
 		vBox.getChildren().addAll(save, saveOnly, timeChooser);
 
 	}
