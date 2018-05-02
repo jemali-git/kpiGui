@@ -1,37 +1,65 @@
 package example2.gui.view.explorer.dataExplorer.util;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 public class Ticket extends HBox {
-	Label proress;
-	Circle circle;
-
-	HBox itemLabel = new HBox();
-	HBox hCircle = new HBox();
+	HBox ticketName = new HBox();
+	HBox selector = new HBox();
+	HBox ticketState = new HBox();
 
 	public Ticket(String type) {
-		getChildren().addAll(itemLabel, hCircle);
+		setAlignment(Pos.CENTER);
+		ticketState.setAlignment(Pos.BASELINE_CENTER);
+
+		getChildren().addAll(ticketName, ticketState, selector);
 		setPadding(new Insets(2, 2, 2, 2));
-		setSpacing(5);
+		setSpacing(3);
 
-		circle = new Circle(3, 3, 3, Color.RED);
-		itemLabel.getChildren().add(new Label(type));
+		ticketName.getChildren().add(new Label(type));
 
-		proress = new Label();
-		itemLabel.getStyleClass().add("itemLabel");
+		ticketName.getStyleClass().add("ticketName");
+		ticketState.getStyleClass().add("ticketState");
+
 	}
 
 	public void selectionOn() {
-		if (!hCircle.getChildren().contains(circle)) {
-			hCircle.getChildren().add(circle);
-		}
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+				selector.getChildren().add(new Circle(3, 3, 3, Color.RED));
+			}
+		});
+		selector.getChildren().add(new Circle(3, 3, 3, Color.RED));
 	}
 
 	public void selectOff() {
-		hCircle.getChildren().remove(circle);
+		Platform.runLater(new Runnable() {
+
+			@Override
+			public void run() {
+				selector.getChildren().clear();
+			}
+		});
+
 	}
+
+	public int setTicketState(String state) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				ticketState.getChildren().clear();
+				ticketState.getChildren().add(new Label(state));
+			}
+		});
+
+		return 0;
+	}
+
 }

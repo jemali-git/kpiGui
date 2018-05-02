@@ -51,7 +51,7 @@ public class DataBaseExplorer extends TreeItem<Object> {
 		childrenLoaded = true;
 		ObservableList<TreeItem<Object>> children = super.getChildren();
 		class CallBack {
-			int addChild(KpiView kpiView, Double progress) {
+			int addChild(KpiView kpiView) {
 				Platform.runLater(new Runnable() {
 					@Override
 					public void run() {
@@ -62,7 +62,8 @@ public class DataBaseExplorer extends TreeItem<Object> {
 			}
 		}
 		CallBack callBack = new CallBack();
-		((KpiDataBase) getValue()).getKpiView(callBack::addChild);
+		ticket.setTicketState("loading..");
+		((KpiDataBase) getValue()).getKpiView(callBack::addChild,ticket::setTicketState);
 		return super.getChildren();
 	}
 }

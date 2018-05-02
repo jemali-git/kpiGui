@@ -18,6 +18,6 @@ public interface KpiView {
 	public String getKpiId();// TODO remove
 	public void save(ViewModel viewModel,Function<String, ?> setTitle,Function<String, ?> setMessage,Function<Float, ?> setProgress);
 
-	public void update(ViewModel viewModel);
+	public void update(ViewModel viewModel,Function<String, ?> setTitle,Function<String, ?> setMessage,Function<Float, ?> setProgress);
 
 }

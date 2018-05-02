@@ -13,7 +13,8 @@ public class Editor extends TabPane {
 	public Editor() {
 	}
 
-	public void createViewModel(KpiView kpiView, Function<Boolean, ?> function) {
+	public void createViewModel(KpiView kpiView, Function<Boolean, ?> setChildrenLoaded,
+			Function<String, ?> setTicketState) {
 		class CallBack {
 			public int addViewModel(EditorTab editorTab) {
 				Platform.runLater(new Runnable() {
@@ -21,12 +22,13 @@ public class Editor extends TabPane {
 					public void run() {
 						getTabs().add(editorTab);
 						getSelectionModel().select(editorTab);
+						setTicketState.apply("complete");
 					}
 				});
 				editorTab.setOnCloseRequest(new EventHandler<Event>() {
 					@Override
 					public void handle(Event arg0) {
-						function.apply(false);
+						setChildrenLoaded.apply(false);
 					}
 				});
 				return 0;

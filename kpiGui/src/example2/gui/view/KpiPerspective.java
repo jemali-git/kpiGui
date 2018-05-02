@@ -2,7 +2,7 @@ package example2.gui.view;
 
 import example2.gui.view.editor.Editor;
 import example2.gui.view.explorer.Explorer;
-import example2.gui.view.operationProgress.OperationProgress;
+import example2.gui.view.operationsProgress.OperationProgress;
 import javafx.geometry.Orientation;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;

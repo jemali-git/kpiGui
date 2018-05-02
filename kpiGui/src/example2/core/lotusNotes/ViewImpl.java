@@ -66,11 +66,11 @@ public class ViewImpl extends Thread implements KpiView {
 		Thread saveThread = new Thread() {
 			public void run() {
 				setTitle.apply("lotus notes save Data");
-				for (int i = 0; i < 100; i++) {
-					setProgress.apply(new Float(i) / 100);
+				for (int i = 0; i < 1000; i++) {
+					setProgress.apply(new Float(i+1) / 1000);
 
 					if (i % 10 == 0) {
-						setMessage.apply("new message");
+						setMessage.apply("new message"+i);
 					}
 					try {
 						Thread.sleep(100);
@@ -79,10 +79,7 @@ public class ViewImpl extends Thread implements KpiView {
 						e.printStackTrace();
 					}
 				}
-
-				// if (!viewModel.getSaveOnly().get()) {
-				// update(viewModel);
-				// }
+				setMessage.apply("lotus notes complete saving");
 			};
 
 		};
@@ -91,13 +88,28 @@ public class ViewImpl extends Thread implements KpiView {
 	}
 
 	@Override
-	public void update(ViewModel viewModel) {
+	public void update(ViewModel viewModel, Function<String, ?> setTitle, Function<String, ?> setMessage,
+			Function<Float, ?> setProgress) {
 		long updatePeriod = viewModel.getUpdatePeriode().get();
 		Boolean stop = false;
 		Thread updateThread = new Thread() {
 			public void run() {
 				while (!stop) {
-					// update data TODO
+					setTitle.apply("updating data");
+					for (int i = 0; i < 50; i++) {
+						setProgress.apply(new Float(i+1) / 50);
+
+						if (i % 10 == 0) {
+							setMessage.apply("lotus update view"+i);
+						}
+						try {
+							Thread.sleep(100);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					setMessage.apply("lotus notes complete update");
 					try {
 						sleep(updatePeriod);
 					} catch (InterruptedException e) {
@@ -106,7 +118,6 @@ public class ViewImpl extends Thread implements KpiView {
 					}
 				}
 			};
-
 		};
 		updateThread.start();
 	}

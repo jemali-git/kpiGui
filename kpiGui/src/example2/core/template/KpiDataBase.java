@@ -1,11 +1,11 @@
 package example2.core.template;
 
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public interface KpiDataBase {
 	public String getDataBasePath();
 
-	public void getKpiView(BiFunction<KpiView, Double, ?> function);
+	public void getKpiView(Function<KpiView, ?> addChild,Function<String, ?> setTicketState);
 
 	public KpiServer getKpiServer();
 

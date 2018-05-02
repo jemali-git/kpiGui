@@ -22,7 +22,8 @@ public class viewExplorer extends TreeItem<Object> {
 					if (!childrenLoaded) {
 						childrenLoaded = true;
 						KpiView kpiView = (KpiView) getValue();
-						KpiPerspective.editor.createViewModel(kpiView, this::setChildrenLoaded);
+						ticket.setTicketState("loading..");
+						KpiPerspective.editor.createViewModel(kpiView, this::setChildrenLoaded,ticket::setTicketState);
 					}
 				}
 				event.consume();

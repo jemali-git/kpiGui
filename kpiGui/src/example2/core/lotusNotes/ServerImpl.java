@@ -1,6 +1,6 @@
 package example2.core.lotusNotes;
 
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import example2.core.template.KpiDataBase;
 import example2.core.template.KpiServer;
@@ -14,20 +14,24 @@ public class ServerImpl extends Thread implements KpiServer {
 	}
 
 	@Override
-	public void getKpiDataBases(BiFunction<KpiDataBase, Double, ?> function) {
-		KpiServer kpiServer = this;
+	public void getKpiDataBases(Function<KpiDataBase, ?> addChild,Function<String, ?> setTicketState) {
+		KpiServer kpiServer=this;
 		Thread thread = new Thread() {
 			@Override
 			public void run() {
 				double count = 10;
 				for (int i = 0; i < count; i++) {
 					try {
-						Thread.sleep(10);
+						Thread.sleep(1000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					double progress = new Double(i + 1) * 100 / count;
-					function.apply(new DataBaseImpl(WorkBenchWindow.getRN(), kpiServer), progress);
+					String progress = (new Double(i + 1) * 100 / count) + "%";
+					if (i == count - 1) {
+						progress = "complete";
+					}
+					setTicketState.apply(progress);
+					addChild.apply(new DataBaseImpl(WorkBenchWindow.getRN(), kpiServer));
 				}
 			}
 		};
@@ -49,6 +53,7 @@ public class ServerImpl extends Thread implements KpiServer {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	@Override
 	public String getKpiId() {
 		return getServerPath();
