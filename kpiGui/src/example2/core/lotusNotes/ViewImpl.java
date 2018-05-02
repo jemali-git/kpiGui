@@ -2,6 +2,7 @@ package example2.core.lotusNotes;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 import example2.core.template.KpiColumn;
@@ -111,7 +112,7 @@ public class ViewImpl extends Thread implements KpiView {
 					}
 					setMessage.apply("lotus notes complete update");
 					try {
-						sleep(updatePeriod);
+						TimeUnit.SECONDS.sleep(updatePeriod);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
