@@ -7,10 +7,12 @@ import example2.gui.statusLine.KpiStatusLine;
 import example2.gui.toolBar.KpiToolBar;
 import example2.gui.view.KpiPerspective;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class WorkBenchWindow extends Application {
 	public static KpiMenuBar kpiMenuBar;
@@ -35,6 +37,12 @@ public class WorkBenchWindow extends Application {
 		borderPane.setBottom(kpiStatusLine);
 		primaryStage.setScene(new Scene(borderPane, 700, 500));
 		primaryStage.show();
+
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			public void handle(WindowEvent we) {
+				Runtime.getRuntime().exit(0);
+			}
+		});
 	}
 
 	public static void init(String[] args) {

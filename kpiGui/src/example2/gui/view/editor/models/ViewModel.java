@@ -1,15 +1,15 @@
 package example2.gui.view.editor.models;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import example2.core.template.KpiColumn;
 import example2.core.template.KpiView;
 import example2.gui.view.editor.EditorTab;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -22,7 +22,7 @@ public class ViewModel {
 
 	public ViewModel(KpiView kpiView, Function<EditorTab, ?> addViewModel) {
 		this.kpiView = kpiView;
-		
+
 		viewName = new SimpleStringProperty(kpiView.getViewPath());
 		saveOnly = new SimpleBooleanProperty(false);
 		updatePeriode = new SimpleLongProperty(0);// TODO
@@ -80,4 +80,15 @@ public class ViewModel {
 		this.kpiView = kpiView;
 	}
 
+	public Map serialize() {
+		Map<String, Object> viewModelSerialization = new HashMap<>();
+		viewModelSerialization.put("viewName", viewName.get());
+		viewModelSerialization.put("updatePeriode", updatePeriode.get());
+		viewModelSerialization.put("saveOnly", saveOnly.get());
+		//viewModelSerialization.put("kpiView", value);
+		
+		Set<Map> columnModelsSerialization;
+		//viewModelSerialization.put("columnModelsSerialization", value);
+		return viewModelSerialization;
+	}
 }

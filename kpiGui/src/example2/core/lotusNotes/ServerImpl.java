@@ -7,10 +7,10 @@ import example2.core.template.KpiServer;
 import example2.gui.WorkBenchWindow;
 
 public class ServerImpl extends Thread implements KpiServer {
-	String name;
+	String serverPath;
 
 	public ServerImpl(String name) {
-		this.name = name;
+		this.serverPath = name;
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class ServerImpl extends Thread implements KpiServer {
 
 	@Override
 	public String getServerPath() {
-		return name;
+		return serverPath;
 	}
 
 	@Override

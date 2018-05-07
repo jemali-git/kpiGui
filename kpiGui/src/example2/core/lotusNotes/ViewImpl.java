@@ -1,5 +1,9 @@
 package example2.core.lotusNotes;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -14,7 +18,6 @@ import example2.gui.view.editor.models.ViewModel;
 public class ViewImpl extends Thread implements KpiView {
 	String viewPath;
 	KpiDataBase kpiDataBase;
-	
 
 	public ViewImpl(String viewPath, KpiDataBase kpiDataBase) {
 		this.viewPath = viewPath;
@@ -26,6 +29,7 @@ public class ViewImpl extends Thread implements KpiView {
 		Thread thread = new Thread() {
 			@Override
 			public void run() {
+
 				Set<KpiColumn> kpiColumns = new HashSet<>();
 				for (int i = 0; i < 25; i++) {
 					try {
@@ -66,17 +70,38 @@ public class ViewImpl extends Thread implements KpiView {
 			Function<Float, ?> setProgress) {
 		Thread saveThread = new Thread() {
 			public void run() {
+				Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+
+					public void run() {
+
+						try {
+							FileOutputStream fos = new FileOutputStream("viewModel.kpi");
+							ObjectOutputStream oos = new ObjectOutputStream(fos);
+							oos.writeObject(viewModel.serialize());
+							oos.close();
+							
+//							FileInputStream fis = new FileInputStream("mybean.ser");
+//							ObjectInputStream ois = new ObjectInputStream(fis);
+//							MyBean result = (MyBean) ois.readObject();
+//							ois.close();
+							
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+
+					}
+				}));
 				setTitle.apply("lotus notes save Data");
-				for (int i = 0; i < 1000; i++) {
-					setProgress.apply(new Float(i+1) / 1000);
+
+				for (int i = 0; i < 100; i++) {
+					setProgress.apply(new Float(i + 1) / 100);
 
 					if (i % 10 == 0) {
-						setMessage.apply("new message"+i);
+						setMessage.apply("new message" + i);
 					}
 					try {
-						Thread.sleep(100);
+						Thread.sleep(10);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -95,13 +120,14 @@ public class ViewImpl extends Thread implements KpiView {
 		Boolean stop = false;
 		Thread updateThread = new Thread() {
 			public void run() {
+
 				while (!stop) {
 					setTitle.apply("updating data");
 					for (int i = 0; i < 50; i++) {
-						setProgress.apply(new Float(i+1) / 50);
+						setProgress.apply(new Float(i + 1) / 50);
 
 						if (i % 10 == 0) {
-							setMessage.apply("lotus update view"+i);
+							setMessage.apply("lotus update view" + i);
 						}
 						try {
 							Thread.sleep(100);
@@ -117,6 +143,7 @@ public class ViewImpl extends Thread implements KpiView {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+
 				}
 			};
 		};

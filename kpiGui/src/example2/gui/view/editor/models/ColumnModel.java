@@ -4,7 +4,7 @@ import example2.core.template.KpiColumn;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-public class ColumnModel {
+public class ColumnModel  {
 	KpiColumn kpiColumn;
 	SimpleStringProperty columnName;
 	SimpleBooleanProperty isPrimaryKey;
