@@ -1,6 +1,14 @@
 package TaskSchedule;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,6 +18,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
@@ -20,11 +29,18 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+import javafx.util.Duration;
 
 public class TableViewSample extends Application {
 
-	private TableView<Task> table = new TableView<Task>();
-	private final ObservableList<Task> data = FXCollections.observableArrayList(new Task("Jacob", "Smith"));
+	private static TableView<Person> table = new TableView<Person>();
+	private final ObservableList<Person> data = FXCollections.observableArrayList(
+			new Person("Jacob", "Smith", "jacob.smith@example.com"),
+			new Person("Isabella", "Johnson", "isabella.johnson@example.com"),
+			new Person("Ethan", "Williams", "ethan.williams@example.com"),
+			new Person("Emma", "Jones", "emma.jones@example.com"),
+			new Person("Michael", "Brown", "michael.brown@example.com"));
 	final HBox hb = new HBox();
 
 	public static void main(String[] args) {
@@ -35,75 +51,110 @@ public class TableViewSample extends Application {
 	public void start(Stage stage) {
 		Scene scene = new Scene(new Group());
 		stage.setTitle("Table View Sample");
-		stage.setWidth(500);
-		stage.setHeight(600);
+		stage.setWidth(550);
+		stage.setHeight(550);
 
 		final Label label = new Label("Address Book");
 		label.setFont(new Font("Arial", 20));
 
 		table.setEditable(true);
-		table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-		
-		TableColumn titleCol = new TableColumn("Title");
-		titleCol.setMinWidth(100);
-		titleCol.setCellValueFactory(new PropertyValueFactory<Task, String>("title"));
-		titleCol.setCellFactory(TextFieldTableCell.forTableColumn());
-		titleCol.setOnEditCommit(new EventHandler<CellEditEvent<Task, String>>() {
+
+		TableColumn firstNameCol = new TableColumn("First Name");
+		firstNameCol.setMinWidth(100);
+		firstNameCol.setCellValueFactory(new PropertyValueFactory<Person, String>("firstName"));
+		firstNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+		firstNameCol.setOnEditCommit(new EventHandler<CellEditEvent<Person, String>>() {
 			@Override
-			public void handle(CellEditEvent<Task, String> t) {
-				((Task) t.getTableView().getItems().get(t.getTablePosition().getRow())).setTitle(t.getNewValue());
+			public void handle(CellEditEvent<Person, String> t) {
+				((Person) t.getTableView().getItems().get(t.getTablePosition().getRow())).setFirstName(t.getNewValue());
 			}
 		});
 
-		TableColumn descriptionCol = new TableColumn("Description");
-		descriptionCol.setMinWidth(100);
-		descriptionCol.setCellValueFactory(new PropertyValueFactory<Task, String>("description"));
-		descriptionCol.setCellFactory(TextFieldTableCell.forTableColumn());
-		descriptionCol.setOnEditCommit(new EventHandler<CellEditEvent<Task, String>>() {
+		TableColumn lastNameCol = new TableColumn("Last Name");
+		lastNameCol.setMinWidth(100);
+		lastNameCol.setCellValueFactory(new PropertyValueFactory<Person, String>("lastName"));
+		lastNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
+		lastNameCol.setOnEditCommit(new EventHandler<CellEditEvent<Person, String>>() {
 			@Override
-			public void handle(CellEditEvent<Task, String> t) {
-				((Task) t.getTableView().getItems().get(t.getTablePosition().getRow())).setDescription(t.getNewValue());
+			public void handle(CellEditEvent<Person, String> t) {
+				((Person) t.getTableView().getItems().get(t.getTablePosition().getRow())).setLastName(t.getNewValue());
 			}
 		});
+
+		TableColumn emailCol = new TableColumn("Email");
+		emailCol.setMinWidth(200);
+		emailCol.setCellValueFactory(new PropertyValueFactory<Person, String>("email"));
+		emailCol.setCellFactory(TextFieldTableCell.forTableColumn());
+		emailCol.setOnEditCommit(new EventHandler<CellEditEvent<Person, String>>() {
+			@Override
+			public void handle(CellEditEvent<Person, String> t) {
+				((Person) t.getTableView().getItems().get(t.getTablePosition().getRow())).setEmail(t.getNewValue());
+			}
+		});
+
+		TableColumn actionCol = new TableColumn("Action");
+		actionCol.setMinWidth(100);
+		actionCol.setCellValueFactory(new PropertyValueFactory<>("DUMMY"));
+
+		Callback<TableColumn<Person, String>, TableCell<Person, String>> cellFactory = //
+				new Callback<TableColumn<Person, String>, TableCell<Person, String>>() {
+					@Override
+					public TableCell call(final TableColumn<Person, String> param) {
+						final TableCell<Person, String> cell = new TableCell<Person, String>() {
+
+							final Button btn = new Button("Just Do It");
+
+							@Override
+							public void updateItem(String item, boolean empty) {
+								super.updateItem(item, empty);
+								if (empty) {
+									setGraphic(null);
+									setText(null);
+								} else {
+									btn.setOnAction(event -> {
+										Person person = getTableView().getItems().get(getIndex());
+										person.start();
+										// table.refresh();
+										System.out.println(person.getFirstName() + "   " + person.getLastName());
+
+									});
+									setGraphic(btn);
+									setText(null);
+								}
+							}
+						};
+						return cell;
+					}
+				};
+
+		actionCol.setCellFactory(cellFactory);
 
 		table.setItems(data);
-		table.getColumns().addAll(titleCol, descriptionCol);
-
-		// data.forEach(person -> {
-		// DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd HH:mm:SS");
-		// Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
-		// person.setTime(LocalDateTime.now().format(formatter));
-		// table.refresh();
-		// }), new KeyFrame(Duration.seconds(1)));
-		// clock.setCycleCount(Animation.INDEFINITE);
-		// clock.play();
-		// });
+		table.getColumns().addAll(firstNameCol, lastNameCol, emailCol, actionCol);
 
 		final TextField addFirstName = new TextField();
 		addFirstName.setPromptText("First Name");
-		addFirstName.setMaxWidth(titleCol.getPrefWidth());
+		addFirstName.setMaxWidth(firstNameCol.getPrefWidth());
 		final TextField addLastName = new TextField();
-		addLastName.setMaxWidth(descriptionCol.getPrefWidth());
+		addLastName.setMaxWidth(lastNameCol.getPrefWidth());
 		addLastName.setPromptText("Last Name");
+		final TextField addEmail = new TextField();
+		addEmail.setMaxWidth(emailCol.getPrefWidth());
+		addEmail.setPromptText("Email");
 
 		final Button addButton = new Button("Add");
 		addButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				data.add(new Task(addFirstName.getText(), addLastName.getText()));
+				data.add(new Person(addFirstName.getText(), addLastName.getText(), addEmail.getText()));
 				addFirstName.clear();
 				addLastName.clear();
+				addEmail.clear();
 			}
 		});
 
-		hb.getChildren().addAll(addButton,addFirstName, addLastName);
+		hb.getChildren().addAll(addFirstName, addLastName, addEmail, addButton);
 		hb.setSpacing(3);
-
-		Button start = new Button("Start");
-		Button reset = new Button("Reset");
-		HBox hBox = new HBox(start, reset);
-
-		hb.getChildren().add(hBox);
 
 		final VBox vbox = new VBox();
 		vbox.setSpacing(5);
@@ -116,4 +167,54 @@ public class TableViewSample extends Application {
 		stage.show();
 	}
 
+	public static class Person {
+
+		private final SimpleStringProperty firstName;
+		private final SimpleStringProperty lastName;
+		private final SimpleStringProperty email;
+
+		private Person(String fName, String lName, String email) {
+			this.firstName = new SimpleStringProperty(fName);
+			this.lastName = new SimpleStringProperty(lName);
+			this.email = new SimpleStringProperty(email);
+		}
+
+		public void start() {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
+			Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
+				String string=LocalDateTime.now().format(formatter);
+				setEmail(string);
+				table.refresh();
+				//table.getColumns().get(2).setVisible(false);  
+				//table.getColumns().get(2).setVisible(true);
+			}), new KeyFrame(Duration.seconds(2)));
+			clock.setCycleCount(Animation.INDEFINITE);
+			clock.play();
+			
+		}
+
+		public String getFirstName() {
+			return firstName.get();
+		}
+
+		public void setFirstName(String fName) {
+			firstName.set(fName);
+		}
+
+		public String getLastName() {
+			return lastName.get();
+		}
+
+		public void setLastName(String fName) {
+			lastName.set(fName);
+		}
+
+		public String getEmail() {
+			return email.get();
+		}
+
+		public void setEmail(String fName) {
+			email.set(fName);
+		}
+	}
 }
