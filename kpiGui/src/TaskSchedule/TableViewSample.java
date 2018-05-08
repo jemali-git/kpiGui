@@ -3,6 +3,7 @@ package TaskSchedule;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -173,6 +174,9 @@ public class TableViewSample extends Application {
 		private final SimpleStringProperty lastName;
 		private final SimpleStringProperty email;
 
+		long totalTime;
+		long startTime;
+
 		private Person(String fName, String lName, String email) {
 			this.firstName = new SimpleStringProperty(fName);
 			this.lastName = new SimpleStringProperty(lName);
@@ -182,15 +186,23 @@ public class TableViewSample extends Application {
 		public void start() {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
 			Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
-				String string=LocalDateTime.now().format(formatter);
+
+				Date date = new Date();
+				totalTime += date.getTime() - startTime;
+				
+				//new Date(totalTime)
+				
+				
+				String string = LocalDateTime.now().format(formatter);
+
 				setEmail(string);
 				table.refresh();
-				//table.getColumns().get(2).setVisible(false);  
-				//table.getColumns().get(2).setVisible(true);
+				// table.getColumns().get(2).setVisible(false);
+				// table.getColumns().get(2).setVisible(true);
 			}), new KeyFrame(Duration.seconds(2)));
 			clock.setCycleCount(Animation.INDEFINITE);
 			clock.play();
-			
+
 		}
 
 		public String getFirstName() {
