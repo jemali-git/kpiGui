@@ -1,83 +1,144 @@
 package neuralNetworks;
 
 public class Matrix {
-	Vector[] vectors;
+	double[][] values;
+	int rowNum;
+	int columnNum;
 
-	public Matrix(Vector[] vectors) {
-		this.vectors = vectors;
+	Matrix(double scalar) {
+		rowNum = 1;
+		columnNum = 1;
+		values = new double[rowNum][columnNum];
+		values[0][0] = scalar;
+
+	}
+
+	Matrix(double[] array1D) {
+		rowNum = array1D.length;
+		columnNum = 1;
+		values = new double[rowNum][columnNum];
+		for (int i = 0; i < array1D.length; i++) {
+			values[i] = new double[] { array1D[i] };
+		}
+	}
+
+	Matrix(double[][] array2D) {
+		rowNum = array2D.length;
+		columnNum = array2D[0].length;
+		values = new double[rowNum][columnNum];
+		for (int i = 0; i < array2D.length; i++) {
+			for (int j = 0; j < array2D[i].length; j++) {
+				values[i][j] = array2D[i][j];
+			}
+		}
 	}
 
 	public Matrix add(Matrix matrix) {
-		Vector[] newVectors = new Vector[vectors.length];
-
-		Vector[] vectors1 = matrix.getVectors();
-		for (int i = 0; i < vectors.length; i++) {
-			newVectors[i] = vectors[i].add(vectors1[i]);
-		}
-		return new Matrix(newVectors);
-	}
-
-	public Matrix transpose(Matrix matrix) {
-		
-		return null;
-	}
-
-	public Vector[] getVectors() {
-		return vectors;
-	}
-
-	public void setVectors(Vector[] vectors) {
-		this.vectors = vectors;
-	}
-
-	public static double[][] cartesianProduct(double[][] mat0, double[][] mat1) {
-		int rows0 = mat0.length;
-		int columns0 = mat0[0].length;
-
-		int rows1 = mat1.length;
-		int columns1 = mat1[0].length;
-		if (columns0 != rows1) {
-			return null;
-		}
-		double[][] result = new double[rows0][columns1];
-
-		double[][] mat1T = transpose(mat1);
-
-		for (int i = 0; i < mat0.length; i++) {
-			for (int j = 0; j < mat1T.length; j++) {
-				result[i][j] = Function.sum(Function.multiply(mat0[i], mat1T[j]));
+		double[][] values = matrix.getValues();
+		double[][] newValues = new double[rowNum][columnNum];
+		for (int i = 0; i < rowNum; i++) {
+			for (int j = 0; j < columnNum; j++) {
+				newValues[i][j] = this.values[i][j] + values[i][j];
 			}
 		}
-		return result;
+		return new Matrix(newValues);
 	}
 
-	public static double[][] transpose(double[][] mat) {
-		int rows = mat.length;
-		int comlumns = mat[0].length;
-		double[][] result = new double[comlumns][rows];
-		for (int i = 0; i < mat.length; i++) {
-			for (int j = 0; j < mat[i].length; j++) {
-				result[j][i] = mat[i][j];
+	public Matrix add(double scalar) {
+		double[][] newValues = new double[rowNum][columnNum];
+		for (int i = 0; i < rowNum; i++) {
+			for (int j = 0; j < columnNum; j++) {
+				newValues[i][j] = this.values[i][j] + scalar;
 			}
 		}
-		return result;
+		return new Matrix(newValues);
 	}
 
-	public static double[][] toMatrix(double[] array) {
-		double[][] result = new double[array.length][1];
-		for (int i = 0; i < array.length; i++) {
-			double[] arr = new double[1];
-			arr[0] = array[i];
-			result[i] = arr;
+	public Matrix mul(double scalar) {
+		double[][] newValues = new double[rowNum][columnNum];
+		for (int i = 0; i < rowNum; i++) {
+			for (int j = 0; j < columnNum; j++) {
+				newValues[i][j] = this.values[i][j] * scalar;
+			}
 		}
-		return result;
+		return new Matrix(newValues);
+	}
+	public Matrix mul(Matrix matrix) {
+		double[][] values = matrix.getValues();
+		double[][] newValues = new double[rowNum][columnNum];
+		for (int i = 0; i < rowNum; i++) {
+			for (int j = 0; j < columnNum; j++) {
+				newValues[i][j] = this.values[i][j]*values[i][j];
+			}
+		}
+		return new Matrix(newValues);
+	}
+	
+	public Matrix transpose() {
+		double[][] newValues = new double[columnNum][rowNum];
+		for (int i = 0; i < rowNum; i++) {
+			for (int j = 0; j < columnNum; j++) {
+				newValues[j][i] = this.values[i][j];
+			}
+		}
+		return new Matrix(newValues);
 	}
 
-	public static double[] toVector(double[][] matrix) {
-		double[] result = new double[matrix.length];
-		for (int i = 0; i < matrix.length; i++) {
-			result[i] = matrix[i][0];
+	public Matrix cartesianProduct(Matrix matrix) {
+		double[][] newValues = new double[this.rowNum][matrix.getColumnNum()];
+		Matrix matrixT = matrix.transpose();
+
+		for (int i = 0; i < this.values.length; i++) {
+			for (int j = 0; j < matrixT.getValues().length; j++) {
+				newValues[i][j] = getScalar(this.values[i], matrixT.getValues()[j]);
+			}
 		}
-		return result;
+		return new Matrix(newValues);
 	}
+
+	private double getScalar(double[] arr1, double[] arr2) {
+		double sum = 0;
+		for (int i = 0; i < arr1.length; i++) {
+			sum += arr1[i] * arr2[i];
+
+		}
+		return sum;
+	}
+
+	public double[][] getValues() {
+		return values;
+	}
+
+	public void setValues(double[][] values) {
+		this.values = values;
+	}
+
+	public int getRowNum() {
+		return rowNum;
+	}
+
+	public void setRowNum(int rowNum) {
+		this.rowNum = rowNum;
+	}
+
+	public int getColumnNum() {
+		return columnNum;
+	}
+
+	public void setColumnNum(int columnNum) {
+		this.columnNum = columnNum;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder stringBuilder = new StringBuilder();
+		for (int i = 0; i < rowNum; i++) {
+			for (int j = 0; j < columnNum; j++) {
+				stringBuilder.append(values[i][j] + " ");
+			}
+			stringBuilder.append("\n");
+		}
+		return stringBuilder.toString();
+	}
+
 }
